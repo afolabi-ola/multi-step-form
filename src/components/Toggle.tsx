@@ -1,17 +1,21 @@
 import styled from 'styled-components';
+import useApp from '../hooks/useApp';
+import React from 'react';
 
 interface ToggleProps {
   isToggled: boolean;
-  onHandleToggle: () => void;
+  dispatch: React.Dispatch<{ type: 'toggle' }>;
 }
 
 interface ThumbStylesProps {
   $active: boolean;
 }
 
-function Toggle({ isToggled, onHandleToggle }: ToggleProps) {
+function Toggle() {
+  const { isToggled, dispatch }: ToggleProps = useApp();
+
   return (
-    <ToggleContainer onClick={onHandleToggle}>
+    <ToggleContainer onClick={() => dispatch({ type: 'toggle' })}>
       <ThumbStyles $active={isToggled}></ThumbStyles>
     </ToggleContainer>
   );
@@ -41,17 +45,4 @@ const ThumbStyles = styled.div<ThumbStylesProps>`
   transition: transform 0.3s ease;
   transform: translateX(${({ $active }) => ($active === true ? '100%' : '0%')});
 `;
-// const ThumbStyles = styled.div.attrs<ThumbStylesProps>(({ active }) => ({
-//   style: {
-//     transform: active ? 'translateX(100%)' : 'translateX(0%)',
-//   },
-// }))<ThumbStylesProps>`
-//   width: 1.3rem;
-//   height: 100%;
-//   background-color: var(--white);
-//   border-radius: 50%;
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   transition: transform 0.3s ease;
-// `;
+

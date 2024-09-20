@@ -48,7 +48,7 @@ const ButtonStyle = styled.button<{ $buttonType: 'next' | 'prev' | 'confirm' }>`
         ? `var(--white)`
         : props.$buttonType === 'prev'
         ? `var(--marine-blue)`
-        : 'var(--white)'};
+        : 'var(--cool-gray)'};
   }
 `;
 

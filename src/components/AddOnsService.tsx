@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import useApp from '../hooks/useApp';
 
 interface AddOnsServiceProps {
   title: string;
   desc: string;
-  price: string;
+  price: number;
   isChecked: boolean;
   onCheck: () => void;
 }
@@ -14,22 +15,39 @@ function AddOnsService({
   isChecked,
   onCheck,
 }: AddOnsServiceProps) {
+  const { isYearly } = useApp();
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent double triggering if checkbox is clicked directly
+
+    if ((e.target as HTMLElement).tagName !== 'INPUT') {
+      onCheck();
+    }
+  };
+
   return (
-    <AddOnsServiceStyles onClick={onCheck} $isChecked={isChecked}>
+    <AddOnsServiceStyles onClick={handleClick} $isChecked={isChecked}>
       <FirstDivStyles>
         <input
           type='checkbox'
           name={title}
           id={title}
           checked={isChecked}
-          onChange={onCheck}
+          onChange={(e) => {
+            e.stopPropagation();
+            onCheck();
+          }}
         />
-        <div>
-          <h3>{title}</h3>
-          <p>{desc}</p>
-        </div>
+        <label htmlFor={title}>
+          <div>
+            <h3>{title}</h3>
+            <p>{desc}</p>
+          </div>
+        </label>
       </FirstDivStyles>
-      <span>{price}</span>
+      <span>
+        +${price}/{isYearly ? 'yr' : 'mo'}
+      </span>
     </AddOnsServiceStyles>
   );
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import AppLayout from './pages/AppLayout';
 import PageNotFound from './pages/PageNotFound';
@@ -7,40 +7,17 @@ import Plans from './pages/Plans';
 import AddOns from './pages/AddOns';
 import FinishUp from './pages/FinishUp';
 import Thanks from './pages/Thanks';
-import { createContext, useState } from 'react';
+import { AppProvider } from './hooks/AppContext';
 
-interface AppContextData {
-  isToggled: boolean;
-  onHandleToggled: () => void;
-  isYearly: boolean;
-}
-
-const AppContext = createContext<AppContextData>({
-  isToggled: false,
-  isYearly: false,
-  onHandleToggled: () => {},
-});
 
 function App() {
-  const [isToggled, setIsToggled] = useState<boolean>(false);
-
-  const handleToggle = () => {
-    setIsToggled(!isToggled);
-  };
-
   return (
-    <AppContext.Provider
-      value={{
-        isToggled: isToggled,
-        onHandleToggled: handleToggle,
-        isYearly: isToggled,
-      }}
-    >
+    <AppProvider>
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<AppLayout />}>
-            <Route index element={<PersonalInfo />} />
+            <Route index element={<Navigate replace to='/user' />} />
             <Route path='user' element={<PersonalInfo />} />
             <Route path='plans' element={<Plans />} />
             <Route path='addons' element={<AddOns />} />
@@ -50,8 +27,8 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </AppContext.Provider>
+    </AppProvider>
   );
 }
 
-export { App, AppContext };
+export default App;

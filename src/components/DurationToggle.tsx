@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Toggle from './Toggle';
-import { useContext } from 'react';
-import { AppContext } from '../App';
+import useApp from '../hooks/useApp';
 
 interface ToggleTextProps {
   $isActive: boolean;
@@ -9,17 +8,15 @@ interface ToggleTextProps {
 
 interface DurationToggleProps {
   isToggled: boolean;
-  onHandleToggled: () => void;
 }
 
 function DurationToggle() {
-  const { isToggled, onHandleToggled }: DurationToggleProps =
-    useContext(AppContext);
+  const { isToggled }: DurationToggleProps = useApp();
 
   return (
     <DurationToggleStyle>
       <ToggleText $isActive={!isToggled}>Monthly</ToggleText>
-      <Toggle onHandleToggle={onHandleToggled} isToggled={isToggled} />
+      <Toggle />
       <ToggleText $isActive={isToggled}>Yearly</ToggleText>
     </DurationToggleStyle>
   );
@@ -41,10 +38,4 @@ const ToggleText = styled.p<ToggleTextProps>`
     $isActive === true ? 'var(--marine-blue)' : 'var(--cool-gray)'};
   font-weight: var(--font-lg);
 `;
-// const ToggleText = styled.p.attrs<ToggleTextProps>(({ active }) => ({
-//   style: {
-//     color: active ? 'var(--marine-blue)' : 'var(--cool-gray)',
-//   },
-// }))<ToggleTextProps>`
-//   font-weight: var(--font-lg);
-// `;
+

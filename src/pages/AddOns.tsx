@@ -4,33 +4,42 @@ import Main from '../components/Main';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import AddOnsService from '../components/AddOnsService';
-import { useContext, useState } from 'react';
-import { AppContext } from '../App';
+import useApp from '../hooks/useApp';
+import { useNavigate } from 'react-router-dom';
 
 interface AddOnsProps {
   isYearly: boolean;
+  isOnlineServiceChecked: boolean;
+  isLargerStorageChecked: boolean;
+  isCustomizableProfileChecked: boolean;
+  dispatch: React.Dispatch<
+    | { type: 'onlineServiceToggle'; payload: { title: string; price: number } }
+    | { type: 'largerStorageToggle'; payload: { title: string; price: number } }
+    | {
+        type: 'customizableProfileToggle';
+        payload: { title: string; price: number };
+      }
+  >;
 }
 
 function AddOns() {
-  
-  const { isYearly }: AddOnsProps = useContext(AppContext);
+  const navigate = useNavigate();
 
-  const [isOnlineServiceChecked, setIsOnlineServiceChecked] = useState(false);
-  const [isLargerStorageChecked, setIsLargerStorageChecked] = useState(false);
-  const [isCustomizableProfileChecked, setIsCustomizableProfileChecked] =
-    useState(false);
-
-  const handleOnlineServiceChecked = () => {
-    setIsOnlineServiceChecked(!isOnlineServiceChecked);
+  const handleNext = (): void => {
+    navigate('/finish');
   };
 
-  const handleLargerStorageChecked = () => {
-    setIsLargerStorageChecked(!isLargerStorageChecked);
+  const handlePrev = (): void => {
+    navigate('/plans');
   };
 
-  const handleCustomizableProfileChecked = () => {
-    setIsCustomizableProfileChecked(!isCustomizableProfileChecked);
-  };
+  const {
+    isYearly,
+    isOnlineServiceChecked,
+    isLargerStorageChecked,
+    isCustomizableProfileChecked,
+    dispatch,
+  }: AddOnsProps = useApp();
 
   return (
     <AddOnStyles>
@@ -41,28 +50,50 @@ function AddOns() {
         <AddOnsService
           title='Online service'
           desc='Access to multiplayer games'
-          price={isYearly === true ? '+$10/yr' : '+$1/mo'}
+          price={isYearly ? 10 : 1}
           isChecked={isOnlineServiceChecked}
-          onCheck={handleOnlineServiceChecked}
+          onCheck={() =>
+            dispatch({
+              type: 'onlineServiceToggle',
+              payload: { title: 'Online service', price: isYearly ? 10 : 1 },
+            })
+          }
         />
         <AddOnsService
           title='Larger storage'
           desc='Extra 1TB of cloud save'
-          price={isYearly === true ? '+$20/yr' : '+$2/mo'}
+          price={isYearly ? 20 : 2}
           isChecked={isLargerStorageChecked}
-          onCheck={handleLargerStorageChecked}
+          onCheck={() =>
+            dispatch({
+              type: 'largerStorageToggle',
+              payload: { title: 'Larger storage', price: isYearly ? 20 : 2 },
+            })
+          }
         />
         <AddOnsService
           title='Customizable Profile'
           desc='Custom theme on your profile'
-          price={isYearly === true ? '+$20/yr' : '+$2/mo'}
+          price={isYearly ? 20 : 2}
           isChecked={isCustomizableProfileChecked}
-          onCheck={handleCustomizableProfileChecked}
+          onCheck={() =>
+            dispatch({
+              type: 'customizableProfileToggle',
+              payload: {
+                title: 'Customizable Profile',
+                price: isYearly ? 20 : 2,
+              },
+            })
+          }
         />
       </Main>
       <Footer>
-        <Button buttonType='prev'>Go Back</Button>
-        <Button buttonType='next'>Next Step</Button>
+        <Button buttonType='prev' onClick={handlePrev}>
+          Go Back
+        </Button>
+        <Button buttonType='next' onClick={handleNext}>
+          Next Step
+        </Button>
       </Footer>
     </AddOnStyles>
   );

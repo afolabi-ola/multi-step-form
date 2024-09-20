@@ -3,36 +3,28 @@ import PlanLevel from './PlanLevel';
 import arcadeImage from '../assets/icon-arcade.svg';
 import advanceImage from '../assets/icon-advanced.svg';
 import proImage from '../assets/icon-pro.svg';
-import { useContext } from 'react';
-import { AppContext } from '../App';
+import useApp from '../hooks/useApp';
 
 interface PlanLevelContProps {
-  isYearly: boolean;
+  isToggled: boolean;
 }
 
 function PlanLevelCont() {
-  const { isYearly }: PlanLevelContProps = useContext(AppContext);
+  const { isToggled }: PlanLevelContProps = useApp();
 
   return (
     <PlanLevelContStyles>
       <PlanLevel
         image={arcadeImage}
         title='Arcade'
-        price={isYearly ? '$90/yr' : '$9/mo'}
-        isYearly={isYearly}
+        price={isToggled ? 90 : 9}
       />
       <PlanLevel
         image={advanceImage}
         title='Advanced'
-        price={isYearly ? '$120/yr' : '$12/mo'}
-        isYearly={isYearly}
+        price={isToggled ? 120 : 12}
       />
-      <PlanLevel
-        image={proImage}
-        title='Pro'
-        price={isYearly ? '$150/yr' : '$15/mo'}
-        isYearly={isYearly}
-      />
+      <PlanLevel image={proImage} title='Pro' price={isToggled ? 150 : 15} />
     </PlanLevelContStyles>
   );
 }

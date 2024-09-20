@@ -1,22 +1,40 @@
 import styled from 'styled-components';
+import useApp from '../hooks/useApp';
 
 interface PlanLevelProps {
   image: string;
   title: string;
-  price: string;
-  isYearly: boolean;
+  price: number;
 }
 
-function PlanLevel({ title, price, image, isYearly }: PlanLevelProps) {
+function PlanLevel({ title, price, image }: PlanLevelProps) {
+  const { isToggled, planDetails, dispatch } = useApp();
+
+  const isSelected = planDetails.desc === title;
+
   return (
-    <PlanLevelStyles>
+    <PlanLevelStyles
+      onClick={() =>
+        dispatch({
+          type: 'planDetails',
+          payload: {
+            desc: title,
+            price: price,
+            duration: isToggled ? 'Yearly' : 'Monthly',
+          },
+        })
+      }
+      $isSelected={isSelected}
+    >
       <span>
         <img src={image} alt={image} />
       </span>
       <div>
         <h3>{title}</h3>
-        <p>{price}</p>
-        {isYearly && <span>2 months free</span>}
+        <p>
+          ${price}/{isToggled ? 'yr' : 'mo'}
+        </p>
+        {isToggled && <span>2 months free</span>}
       </div>
     </PlanLevelStyles>
   );
@@ -24,10 +42,12 @@ function PlanLevel({ title, price, image, isYearly }: PlanLevelProps) {
 
 export default PlanLevel;
 
-const PlanLevelStyles = styled.div`
+const PlanLevelStyles = styled.div<{ $isSelected: boolean }>`
   border: 1px solid var(--light-gray);
-  background: transparent;
-  width: 90%;
+  background: ${({ $isSelected }) =>
+    $isSelected ? 'var(--light-blue)' : ' transparent'};
+  min-width: 8rem;
+  max-width: 8rem;
   min-height: 10rem;
   padding: 1rem;
   border-radius: 10px;
@@ -46,12 +66,12 @@ const PlanLevelStyles = styled.div`
       margin-bottom: 5px;
     }
     span {
-      font-size: var(--font-sm);
+      font-weight: var(--font-md);
       color: var(--marine-blue);
-      font-size: .8rem;
+      font-size: 0.8rem;
     }
-    h3{
-      font-size: .9rem;
+    h3 {
+      font-size: 0.9rem;
     }
   }
 `;

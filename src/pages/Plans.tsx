@@ -5,8 +5,16 @@ import Footer from '../components/Footer';
 import Button from '../components/Button';
 import PlanLevelCont from '../components/PlanLevelCont';
 import DurationToggle from '../components/DurationToggle';
+import { useNavigate } from 'react-router-dom';
 
 function Plans() {
+  const navigate = useNavigate();
+  const handleNext = (): void => {
+    navigate('/addons');
+  };
+  const handlePrev = (): void => {
+    navigate('/user');
+  };
   return (
     <PlansStyle>
       <Header title='Select your plan'>
@@ -17,8 +25,12 @@ function Plans() {
         <DurationToggle />
       </Main>
       <Footer>
-        <Button buttonType='prev'>Go Back</Button>
-        <Button buttonType='next'>Next Step</Button>
+        <Button buttonType='prev' onClick={handlePrev}>
+          Go Back
+        </Button>
+        <Button buttonType='next' onClick={handleNext}>
+          Next Step
+        </Button>
       </Footer>
     </PlansStyle>
   );
