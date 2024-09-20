@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import sideBarBackground from '../assets/bg-sidebar-desktop.svg';
+// import sideBarBackground from '../assets/bg-sidebar-desktop.svg';
 import Step from './Step';
 
 function SideBar() {
@@ -30,7 +30,7 @@ function SideBar() {
 export default SideBar;
 
 const SideBarStyles = styled.div`
-  background-image: url(${sideBarBackground});
+  background-image: url('./bg-sidebar-desktop.svg');
   min-width: 15.75rem;
   max-height: 100%;
   background-repeat: no-repeat;
